@@ -61,15 +61,53 @@ guessCountDisplay.textContent = "Your guess count is: " + guessCount;
 document.onkeyup = function (event) {
     guessLetter = event.key;
     console.log(guessLetter);
-
-    
     directionDisplay.textContent = "";
+
+    if (guessLetter == 1) {
+        guessCount = 10;
+        letterDisplay.innerHTML = "";
+        usedLetterDisplay.textContent = "";
+        dashes = [];
+        bunnyAnswer = [];
+        userGuesses = [];
+
+        randomWordAddress = Math.floor(Math.random() * bunnyTypes.length);
+        console.log(randomWordAddress);
+        console.log(bunnyTypes[0].length);
+
+        //Computer displays the word in this format _ _ _ _ _ _ _
+        for (var i = 0; i < bunnyTypes[randomWordAddress].length; i++) {
+
+            //checks to see if the letter is a space or word        
+            if (bunnyTypes[randomWordAddress].charAt(i) == ' ') {
+                dashes[i] = " ";
+                // console.log(dashes[i]);
+            } else {
+                dashes[i] = "_";
+                // console.log(dashes[i]);
+            }
+
+            //Assigns the answer into an array
+            bunnyAnswer[i] = bunnyTypes[randomWordAddress].charAt(i);
+            console.log(bunnyAnswer[i] = bunnyTypes[randomWordAddress].charAt(i));
+
+            //Displays the _'s on the html
+            letterDisplay.innerHTML += dashes[i] + "&nbsp;";
+
+        }
+
+        //Displays the directions
+        directionDisplay.textContent = "Guess the type of rabbit! Guess until you're out of guess! Good luck!";
+        //Displays the guess count
+        guessCountDisplay.textContent = "Your guess count is: " + guessCount;
+
+    }
     //Computer checkes to see if that letter has already been used
 
 
     //If letter has been used, does NOT count the tries
 
-    if (userGuesses.indexOf(guessLetter) != -1) {
+    else if (userGuesses.indexOf(guessLetter) != -1) {
         alert("You already used this letter! Try again.");
     }
 
@@ -91,8 +129,7 @@ document.onkeyup = function (event) {
                 }
             }
 
-        } 
-        else {
+        } else {
             guessCount = guessCount - 1;
 
             guessCountDisplay.textContent = "";
@@ -109,9 +146,9 @@ document.onkeyup = function (event) {
         }
     }
 
-    
+
     //when the guess counter goes to 0, answer will display
-    if(guessCount===0) {
+    if (guessCount === 0) {
         //erases all the dashes
         letterDisplay.innerHTML = "";
 
@@ -120,14 +157,8 @@ document.onkeyup = function (event) {
             letterDisplay.innerHTML += bunnyAnswer[i] + "&nbsp;";
         }
 
-        againDisplay.textContent = "Play again? Press any letter."
+        againDisplay.textContent = "Play again? Press 1."
     }
+
+    
 }
-
-
-
-
-
-
-    //When loser runs out of try counts, resets the try counter and displays the word
-    //Bonus? Change images based on what the word is?
