@@ -1,6 +1,7 @@
 // Define Variables
 
-var bunnyTypes = ["holland lop", "eastern cotton tail", "lionhead rabbit", "dutch rabbit", "english lob", "french lop", "mini rex", "netherland dwarf", "american fuzzy", "polish rabbit"]; //https://rabbitpedia.com/rabbit-breeds/ for pictures later
+var bunnyTypes = ["american fuzzy", "dutch rabbit", "english lop", "flemish giant", "french lop", "holland lop", "lionhead rabbit", "mini rex", "netherland dwarf", "polish rabbit"]; 
+var bunnyImages = ['../images/american-fuzzy-lop.jpg', '../images/dutch-rabbit.jpg', '../images/english-lop.jpg', '../images/flemish-giant.jpg', '../images/french-lop-2.jpg','../images/holland-lop-rabbit.jpg', '../images/lionhead-rabbit.jpg', '../images/mini-rex-rabbit-1.jpg', '../images/netherland-dwarf-rabbit.jpg', '../images/polish-rabbit.jpg'];
 var dashes = [];
 var bunnyAnswer = [];
 var userGuesses = [];
@@ -13,6 +14,7 @@ var letterDisplay = document.getElementById("word-text");
 var guessCountDisplay = document.getElementById("guess_Count-text");
 var usedLetterDisplay = document.getElementById("used_Letter-text");
 var againDisplay = document.getElementById("again-text");
+var rabbitpicDisplay = document.createElement("rabbit-pic").src;
 
 
 // Define Functions
@@ -29,6 +31,8 @@ function usedLetters(item) {
 var randomWordAddress = Math.floor(Math.random() * bunnyTypes.length);
 console.log(randomWordAddress);
 console.log(bunnyTypes[0].length);
+
+// rabbitpicDisplay.textContent = bunnyImages[randomWordAddress];
 
 //Computer displays the word in this format _ _ _ _ _ _ _
 for (var i = 0; i < bunnyTypes[randomWordAddress].length; i++) {
@@ -67,6 +71,8 @@ document.onkeyup = function (event) {
         guessCount = 10;
         letterDisplay.innerHTML = "";
         usedLetterDisplay.textContent = "";
+        againDisplay.textContent = ""
+
         dashes = [];
         bunnyAnswer = [];
         userGuesses = [];
@@ -108,7 +114,7 @@ document.onkeyup = function (event) {
     //If letter has been used, does NOT count the tries
 
     else if (userGuesses.indexOf(guessLetter) != -1) {
-        alert("You already used this letter! Try again.");
+        alert("You already used the letter " + guessLetter + " Try again.");
     }
 
     //If letter has NOT been used, computer determines if it's in the word or not
