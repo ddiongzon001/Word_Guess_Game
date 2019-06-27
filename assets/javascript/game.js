@@ -4,12 +4,15 @@ var bunnyTypes = ["holland lop", "eastern cotton tail", "lionhead rabbit", "dutc
 var dashes = [];
 var bunnyAnswer = [];
 var userGuesses = [];
-var emptyspace = "";
+var guessCount = 10;
 var guessLetter;
 
 // Define text related javascript
+var directionDisplay = document.getElementById("directions-text");
 var letterDisplay = document.getElementById("word-text");
+var guessCountDisplay = document.getElementById("guess_Count-text");
 var usedLetterDisplay = document.getElementById("used_Letter-text");
+var againDisplay = document.getElementById("again-text");
 
 
 // Define Functions
@@ -18,8 +21,6 @@ var usedLetterDisplay = document.getElementById("used_Letter-text");
 function usedLetters(item) {
     usedLetterDisplay.textContent += item + ", ";
 }
-
-//Prints out the correct guess letters of the guess word
 
 
 // Main Section of Game
@@ -50,12 +51,19 @@ for (var i = 0; i < bunnyTypes[randomWordAddress].length; i++) {
 
 }
 
+//Displays the directions
+directionDisplay.textContent = "Guess the type of rabbit! Guess until you're out of guess! Good luck!";
+//Displays the guess count
+guessCountDisplay.textContent = "Your guess count is: " + guessCount;
+
 
 //User enters a letter and computer stores a letter
 document.onkeyup = function (event) {
     guessLetter = event.key;
     console.log(guessLetter);
 
+    
+    directionDisplay.textContent = "";
     //Computer checkes to see if that letter has already been used
 
 
@@ -66,38 +74,60 @@ document.onkeyup = function (event) {
     }
 
     //If letter has NOT been used, computer determines if it's in the word or not
-    else if (userGuesses.indexOf(guessLetter) == -1) {
+    else if (userGuesses.indexOf(guessLetter) == -1 && guessCount > 0) {
         userGuesses.push(guessLetter);
+
 
         //FUNCTION TO SHOW USED LETTERS
         usedLetterDisplay.textContent = "Your used letters are: ";
         userGuesses.forEach(usedLetters);
 
         //checks to see if its in the Answer array
-        if (bunnyAnswer.indexOf(guessLetter) != -1){
+        if (bunnyAnswer.indexOf(guessLetter) != -1) {
 
-            for(var i=0; i<bunnyAnswer.length;i++){
-                if (bunnyAnswer[i] === guessLetter)
-                {
+            for (var i = 0; i < bunnyAnswer.length; i++) {
+                if (bunnyAnswer[i] === guessLetter) {
                     dashes[i] = guessLetter;
                 }
             }
-  
+
+        } 
+        else {
+            guessCount = guessCount - 1;
+
+            guessCountDisplay.textContent = "";
+            guessCountDisplay.textContent = "Your guess count is: " + guessCount;
+
+        }
+
+        //erases all the dashes
+        letterDisplay.innerHTML = "";
+
+        //displays the new guessed letters
+        for (var i = 0; i < bunnyAnswer.length; i++) {
+            letterDisplay.innerHTML += dashes[i] + "&nbsp;";
         }
     }
 
-    letterDisplay.innerHTML = "";
+    
+    //when the guess counter goes to 0, answer will display
+    if(guessCount===0) {
+        //erases all the dashes
+        letterDisplay.innerHTML = "";
 
-    for(var i=0; i<bunnyAnswer.length;i++){
-        
-        letterDisplay.innerHTML += dashes[i] + "&nbsp;";
+        //displays the new guessed letters
+        for (var i = 0; i < bunnyAnswer.length; i++) {
+            letterDisplay.innerHTML += bunnyAnswer[i] + "&nbsp;";
+        }
+
+        againDisplay.textContent = "Play again? Press any letter."
     }
+}
 
 
 
 
-    //When user wins, increase the win count by one
+
+
     //When loser runs out of try counts, resets the try counter and displays the word
     //Bonus? Change images based on what the word is?
-
-}
