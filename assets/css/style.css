@@ -1,0 +1,16 @@
+body.background{
+    background-image: url("../images/9788e15650ff2577e5fb1630e71037be.png");
+    background-size: 15%;
+    background-repeat: repeat;
+}
+
+div.sec_columns{
+    padding: 5%;
+    background-color: #FEF0DE;
+    vertical-align: middle;
+    height: 100%;
+}
+
+div.sec_row{
+    text-align: center;
+}

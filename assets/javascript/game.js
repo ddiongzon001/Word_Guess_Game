@@ -1,7 +1,7 @@
 // Define Variables
 
 var bunnyTypes = ["american fuzzy", "dutch rabbit", "english lop", "flemish giant", "french lop", "holland lop", "lionhead rabbit", "mini rex", "netherland dwarf", "polish rabbit"]; 
-var bunnyImages = ['../images/american-fuzzy-lop.jpg', '../images/dutch-rabbit.jpg', '../images/english-lop.jpg', '../images/flemish-giant.jpg', '../images/french-lop-2.jpg','../images/holland-lop-rabbit.jpg', '../images/lionhead-rabbit.jpg', '../images/mini-rex-rabbit-1.jpg', '../images/netherland-dwarf-rabbit.jpg', '../images/polish-rabbit.jpg'];
+var bunnyImages = ['../Word_Guess_Game/assets/images/american-fuzzy-lop.jpg', '../Word_Guess_Game/assets/images/dutch-rabbit.jpg', '../Word_Guess_Game/assets/images/english-lop.jpg', '../Word_Guess_Game/assets/images/flemish-giant.jpg', '../Word_Guess_Game/assets/images/french-lop-2.jpg','../Word_Guess_Game/assets/images/holland-lop-rabbit.jpg', '../Word_Guess_Game/assets/images/lionhead-rabbit.jpg', '../Word_Guess_Game/assets/images/mini-rex-rabbit-1.jpg', '../Word_Guess_Game/assets/images/netherland-dwarf-rabbit.jpg', '../Word_Guess_Game/assets/images/polish-rabbit.jpg'];
 var dashes = [];
 var bunnyAnswer = [];
 var userGuesses = [];
@@ -38,6 +38,8 @@ function checkWin(dash){
 var randomWordAddress = Math.floor(Math.random() * bunnyTypes.length);
 console.log(randomWordAddress);
 console.log(bunnyTypes[0].length);
+
+document.getElementById("rabbit-pic").src = bunnyImages[randomWordAddress];
 
 // rabbitpicDisplay.src = bunnyImages[randomWordAddress];
 
@@ -88,6 +90,8 @@ document.onkeyup = function (event) {
         randomWordAddress = Math.floor(Math.random() * bunnyTypes.length);
         console.log(randomWordAddress);
         console.log(bunnyTypes[0].length);
+
+        document.getElementById("rabbit-pic").src = bunnyImages[randomWordAddress];
 
         //Computer displays the word in this format _ _ _ _ _ _ _
         for (var i = 0; i < bunnyTypes[randomWordAddress].length; i++) {
