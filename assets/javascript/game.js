@@ -74,14 +74,26 @@ document.onkeyup = function (event) {
         userGuesses.forEach(usedLetters);
 
         //checks to see if its in the Answer array
-        if (userGuesses.indexOf(dashes) != -1){
-            
+        if (bunnyAnswer.indexOf(guessLetter) != -1){
 
+            for(var i=0; i<bunnyAnswer.length;i++){
+                if (bunnyAnswer[i] === guessLetter)
+                {
+                    dashes[i] = guessLetter;
+                }
+            }
+  
         }
-
-
-
     }
+
+    letterDisplay.innerHTML = "";
+
+    for(var i=0; i<bunnyAnswer.length;i++){
+        
+        letterDisplay.innerHTML += dashes[i] + "&nbsp;";
+    }
+
+
 
 
     //When user wins, increase the win count by one
