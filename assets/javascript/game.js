@@ -2,7 +2,7 @@
 
     // Regular Variables
         //Number of lives the user has to guess the word
-        var guessCount = 10;
+        var guessCount = 5;
 
         //User's letter that they guess
         var guessLetter;
@@ -39,22 +39,24 @@
         //Displays on the page the letters the user has guessed
         var usedLetterDisplay = document.getElementById("used_Letter-text");
 
-//THIS MIGHT BE USEFUL LATER?!?!??!?!!?!??!?!?!??!
-// var againDisplay = document.getElementById("again-text").appendChild(document.createElement("button"));
-// var againDisplay = document.getElementById("again-text");
-// var rabbitpicDisplay = document.getElementById("rabbit-pic").src;
-
+        //Displays on the page when the user wins or loses
+        var againDisplay = document.getElementById("again-text");
 
 // Define Functions
 
     //Resets all variables
     function reset() {
 
-        //Resets dashes, bunnyAnswer, userGuesses arrays to blank/zero, resets the guess word and puts back lives to 10
-        guessCount = 10;
+        //Resets dashes, bunnyAnswer, userGuesses arrays to blank/zero, resets the guess word and puts back lives to 5
+        guessCount = 5;
+        directionDisplay.style.fontWeight = 'normal';
+        directionDisplay.textContent = "";
+        letterDisplay.style.fontSize = '30px';
         letterDisplay.innerHTML = "";
         usedLetterDisplay.textContent = "";
         againDisplay.textContent = ""
+
+        console.log(guessCount);
     
         dashes = [];
         bunnyAnswer = [];
@@ -105,7 +107,10 @@
         }
         
         //Displays the guess count
-        guessCountDisplay.textContent = "Your guess count is: " + guessCount;
+        guessCountDisplay.textContent = "Lives Remaining: " + guessCount;
+
+        //Hides the button
+        document.getElementById("again-text").style.visibility = 'hidden';
 
     }
 
@@ -118,6 +123,9 @@
     function checkWin(dash) {
         return dash != "_";
     }
+
+    //Shows the button when the user wins or loses
+    document.getElementById('')
 
 
 
@@ -134,295 +142,101 @@
 
         //Assigns the user's guess into guessLetter variable
         guessLetter = event.key;
+        guessLetter = guessLetter.toLowerCase();
 
         //Hides the directions
         directionDisplay.textContent = "";
 
-        //If letter has been used, does NOT count the tries
-        if (userGuesses.indexOf(guessLetter) != -1) {
-            alert("You already used the letter " + guessLetter + " Try again.");
-        }
+        if(guessLetter >= "a" && guessLetter <= "z"){
 
-        //If letter has NOT been used, computer determines if it's in the word or not
-        else if (userGuesses.indexOf(guessLetter) == -1 && guessCount > 0) {
-            userGuesses.push(guessLetter);
+            //If letter has been used, does NOT count the tries
+            if (userGuesses.indexOf(guessLetter) != -1) {
+                alert("You already used the letter " + guessLetter + " Try again.");
+            }
+
+            //If letter has NOT been used, computer determines if it's in the word or not
+            else if (userGuesses.indexOf(guessLetter) == -1 && guessCount > 0) {
+                userGuesses.push(guessLetter);
 
 
-            //FUNCTION TO SHOW USED LETTERS
-            usedLetterDisplay.textContent = "Your used letters are: ";
-            userGuesses.forEach(usedLetters);
+                //FUNCTION TO SHOW USED LETTERS
+                usedLetterDisplay.textContent = "Your used letters are: ";
+                userGuesses.forEach(usedLetters);
 
-            //checks to see if its in the Answer array
-            if (bunnyAnswer.indexOf(guessLetter) != -1) {
+                //checks to see if its in the Answer array
+                if (bunnyAnswer.indexOf(guessLetter) != -1) {
 
+                    for (var i = 0; i < bunnyAnswer.length; i++) {
+                        if (bunnyAnswer[i] === guessLetter) {
+                            dashes[i] = guessLetter;
+                        }
+                    }
+
+                    //checks to see if you win
+                    if (dashes.every(checkWin)) {
+                        directionDisplay.style.fontWeight = 'bold';
+                        directionDisplay.textContent = "YOU WIN!";
+                        
+                        //Asks the user if they want to play again.
+                        againDisplay.style.visibility = 'visible';
+                        againDisplay.textContent = "Play again?";
+                        againDisplay.onclick = function () {
+
+                            reset();
+                            randomWord();
+                            assign();
+                            display();
+                
+                        }
+                    }
+
+
+                }
+
+                else {
+                    guessCount--;
+
+                    guessCountDisplay.textContent = "";
+                    guessCountDisplay.textContent = "Lives Remaining: " + guessCount;
+
+                }
+
+                //erases all the dashes
+                letterDisplay.innerHTML = "";
+
+                //displays the new guessed letters
                 for (var i = 0; i < bunnyAnswer.length; i++) {
-                    if (bunnyAnswer[i] === guessLetter) {
-                        dashes[i] = guessLetter;
-                    }
+                    letterDisplay.innerHTML += dashes[i] + "&nbsp;";
                 }
-
-                //checks to see if you win
-                if (dashes.every(checkWin)) {
-                    directionDisplay.textContent = "YOU WIN!"
-                    var againDisplay = document.getElementById("again-text").appendChild(document.createElement("button"));
-                    againDisplay.textContent = "Play again?"
-                    againDisplay.onclick = function () {
-
-                        reset();
-                        randomWord();
-                        assign();
-                        display();
-            
-                    }
-                }
-
-
-            }    
-            else {
-                guessCount--;
-
-                guessCountDisplay.textContent = "";
-                guessCountDisplay.textContent = "Your guess count is: " + guessCount;
-
             }
 
-            //erases all the dashes
-            letterDisplay.innerHTML = "";
 
-            //displays the new guessed letters
-            for (var i = 0; i < bunnyAnswer.length; i++) {
-                letterDisplay.innerHTML += dashes[i] + "&nbsp;";
+            //when the guess counter goes to 0, answer will display
+            if (guessCount === 0) {
+                //erases all the dashes
+                letterDisplay.innerHTML = "";
+                directionDisplay.style.fontWeight = 'bold';
+                directionDisplay.textContent = "YOU LOST! Here is the answer: ";
+
+                //displays the new guessed letters
+                for (var i = 0; i < bunnyAnswer.length; i++) {
+                    letterDisplay.innerHTML += bunnyAnswer[i] + "&nbsp;";
+                }
+
+                //asks the user if they want to replay again
+                againDisplay.style.visibility = 'visible';
+                againDisplay.textContent = "Play again?"
+                againDisplay.onclick = function () {
+
+                    reset();
+                    randomWord();
+                    assign();
+                    display();
+        
+                }
             }
         }
-
-
-        //when the guess counter goes to 0, answer will display
-        if (guessCount === 0) {
-            //erases all the dashes
-            letterDisplay.innerHTML = "";
-            directionDisplay.textContent = "YOU LOST! Here is the answer: ";
-
-            //displays the new guessed letters
-            for (var i = 0; i < bunnyAnswer.length; i++) {
-                letterDisplay.innerHTML += bunnyAnswer[i] + "&nbsp;";
-            }
-
-            var againDisplay = document.getElementById("again-text").appendChild(document.createElement("button"));
-            againDisplay.textContent = "Play again?"
-
-            againDisplay.onclick = function () {
-
-                reset();
-                randomWord();
-                assign();
-                display();
-    
-            }
+        else{
+            alert("Please guess a letter from a through z only!");
         }
     }
-
-    // if(guessCount === 0){
-    //     againDisplay.onclick = function () {
-
-    //         reset();
-    //         randomWord();
-    //         assign();
-    //         display();
-
-    //     }
-    // }
-
-
-
-//Computer displays the word in this format _ _ _ _ _ _ _
-// for (var i = 0; i < bunnyTypes[randomWordAddress].length; i++) {
-
-//     //checks to see if the letter is a space or word        
-//     if (bunnyTypes[randomWordAddress].charAt(i) == ' ') {
-//         dashes[i] = " ";
-//         // console.log(dashes[i]);
-//     } else {
-//         dashes[i] = "_";
-//         // console.log(dashes[i]);
-//     }
-
-    //Assigns the answer into an array
-    // bunnyAnswer[i] = bunnyTypes[randomWordAddress].charAt(i);
-    // console.log(bunnyAnswer[i] = bunnyTypes[randomWordAddress].charAt(i));
-
-    //Displays the _'s on the html
-    // letterDisplay.innerHTML += dashes[i] + "&nbsp;";
-
-// }
-
-// //Displays the directions
-// directionDisplay.textContent = "Guess the type of rabbit! If you guess a wrong letter, you lose a life! Guess until you're out of chances! Good luck!";
-// //Displays the guess count
-// guessCountDisplay.textContent = "Your guess count is: " + guessCount;
-
-
-// //User enters a letter and computer stores a letter
-// document.onkeyup = function (event) {
-//     guessLetter = event.key;
-//     console.log(guessLetter);
-//     directionDisplay.textContent = "";
-
-
-    //Play again?
-
-    // if (guessLetter == 1  && guessCount == 0) {
-    //     guessCount = 10;
-    //     letterDisplay.innerHTML = "";
-    //     usedLetterDisplay.textContent = "";
-    //     againDisplay.textContent = ""
-
-    //     dashes = [];
-    //     bunnyAnswer = [];
-    //     userGuesses = [];
-
-    //     randomWordAddress = Math.floor(Math.random() * bunnyTypes.length);
-    //     console.log(randomWordAddress);
-    //     console.log(bunnyTypes[0].length);
-
-    //     //Computer displays the word in this format _ _ _ _ _ _ _
-    //     for (var i = 0; i < bunnyTypes[randomWordAddress].length; i++) {
-
-    //         //checks to see if the letter is a space or word        
-    //         if (bunnyTypes[randomWordAddress].charAt(i) == ' ') {
-    //             dashes[i] = " ";
-    //             // console.log(dashes[i]);
-    //         } else {
-    //             dashes[i] = "_";
-    //             // console.log(dashes[i]);
-    //         }
-
-    //         //Assigns the answer into an array
-    //         bunnyAnswer[i] = bunnyTypes[randomWordAddress].charAt(i);
-    //         console.log(bunnyAnswer[i] = bunnyTypes[randomWordAddress].charAt(i));
-
-    //         //Displays the _'s on the html
-    //         letterDisplay.innerHTML += dashes[i] + "&nbsp;";
-
-    //     }
-
-    //     //Displays the directions
-    //     directionDisplay.textContent = "Guess the type of rabbit! If you guess a wrong letter, you lose a life! Guess until you're out of chances! Good luck!";
-    //     //Displays the guess count
-    //     guessCountDisplay.textContent = "Your number of chances left: " + guessCount;
-
-    // }
-
-
-    //Computer checkes to see if that letter has already been used
-
-    //If letter has been used, does NOT count the tries
-
-    // else 
-    // if (userGuesses.indexOf(guessLetter) != -1) {
-    //     alert("You already used the letter " + guessLetter + " Try again.");
-    // }
-
-//     //If letter has NOT been used, computer determines if it's in the word or not
-//     else if (userGuesses.indexOf(guessLetter) == -1 && guessCount > 0) {
-//         userGuesses.push(guessLetter);
-
-
-//         //FUNCTION TO SHOW USED LETTERS
-//         usedLetterDisplay.textContent = "Your used letters are: ";
-//         userGuesses.forEach(usedLetters);
-
-//         //checks to see if its in the Answer array
-//         if (bunnyAnswer.indexOf(guessLetter) != -1) {
-
-//             for (var i = 0; i < bunnyAnswer.length; i++) {
-//                 if (bunnyAnswer[i] === guessLetter) {
-//                     dashes[i] = guessLetter;
-//                 }
-//             }
-
-//             //checks to see if you win
-//             if (dashes.every(checkWin)) {
-//                 directionDisplay.textContent = "YOU WIN!"
-//                 var againDisplay = document.getElementById("again-text").appendChild(document.createElement("button"));
-//                 againDisplay.textContent = "Play again?"
-//             }
-
-
-//         } else {
-//             guessCount = guessCount - 1;
-
-//             guessCountDisplay.textContent = "";
-//             guessCountDisplay.textContent = "Your guess count is: " + guessCount;
-
-//         }
-
-//         //erases all the dashes
-//         letterDisplay.innerHTML = "";
-
-//         //displays the new guessed letters
-//         for (var i = 0; i < bunnyAnswer.length; i++) {
-//             letterDisplay.innerHTML += dashes[i] + "&nbsp;";
-//         }
-//     }
-
-
-//     //when the guess counter goes to 0, answer will display
-//     if (guessCount === 0) {
-//         //erases all the dashes
-//         letterDisplay.innerHTML = "";
-//         directionDisplay.textContent = "YOU LOST! Here is the answer: ";
-
-//         //displays the new guessed letters
-//         for (var i = 0; i < bunnyAnswer.length; i++) {
-//             letterDisplay.innerHTML += bunnyAnswer[i] + "&nbsp;";
-//         }
-
-//         var againDisplay = document.getElementById("again-text").appendChild(document.createElement("button"));
-//         againDisplay.textContent = "Play again?"
-//     }
-
-
-// }
-
-// againDisplay.onclick = function () {
-//     // guessCount = 10;
-//     // letterDisplay.innerHTML = "";
-//     // usedLetterDisplay.textContent = "";
-//     // againDisplay.textContent = ""
-
-//     // dashes = [];
-//     // bunnyAnswer = [];
-//     // userGuesses = [];
-
-//     randomWordAddress = Math.floor(Math.random() * bunnyTypes.length);
-//     console.log(randomWordAddress);
-//     console.log(bunnyTypes[0].length);
-
-//     document.getElementById("rabbit-pic").src = bunnyImages[randomWordAddress];
-
-//     //Computer displays the word in this format _ _ _ _ _ _ _
-//     for (var i = 0; i < bunnyTypes[randomWordAddress].length; i++) {
-
-//         //checks to see if the letter is a space or word        
-//         if (bunnyTypes[randomWordAddress].charAt(i) == ' ') {
-//             dashes[i] = " ";
-//             // console.log(dashes[i]);
-//         } else {
-//             dashes[i] = "_";
-//             // console.log(dashes[i]);
-//         }
-
-//         //Assigns the answer into an array
-//         bunnyAnswer[i] = bunnyTypes[randomWordAddress].charAt(i);
-//         console.log(bunnyAnswer[i] = bunnyTypes[randomWordAddress].charAt(i));
-
-//         //Displays the _'s on the html
-//         letterDisplay.innerHTML += dashes[i] + "&nbsp;";
-
-//     }
-
-//     //Displays the directions
-//     directionDisplay.textContent = "Guess the type of rabbit! If you guess a wrong letter, you lose a life! Guess until you're out of chances! Good luck!";
-//     //Displays the guess count
-//     guessCountDisplay.textContent = "Your number of chances left: " + guessCount;
-//
