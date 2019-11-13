@@ -14,56 +14,45 @@ One page website where the user has to guess the name of the type of rabbit that
 
 ## Snippets of Code
 
-All the questions, which are stored in an array, were made into an object with multiple properties:
-* Actual question
-* Four choices stored in an array
-* Correct answer
-* Image for the result page
+The core variables for the code are mostly arrays:
+* `bunnyTypes`: the whole list of all the different kinds of rabbits in the program
+* `bunnyImages`: the whole list of all the pictures of each rabbit
+* `dashes`: after a bunny is randomly selected, the array will populate with the correct number of dashes and spaces in each index
+* `bunnyAnswer`: after a bunny is randomly selected, the array will populate with the correct letters and spaces in each index
+* `userGuesses`: this array will populate for each key a user enters to guess the bunny type
+
 ```javascript
-var test = [{
-        question: "Who hides eggs on a Sunday?",
-        choices: ["Br'er Rabbit", "Bugs Bunny", "The Easter Bunny", "The White Rabbit"],
-        answer: "The Easter Bunny",
-        image: "../TriviaGame/assets/images/easter_bunny.jpg"
-    },
-    {
-        question: "He's late for a very important date",
-        choices: ["Lola Bunny", "Judy Hopps", "Thumper", "The White Rabbit"],
-        answer: "The White Rabbit",
-        image: "../TriviaGame/assets/images/white_rabbit.jpg"
-    },
+var bunnyTypes = ["american fuzzy", "dutch rabbit", "english lop", "flemish giant", "french lop", "holland lop", "lionhead rabbit", "mini rex", "netherland dwarf", "polish rabbit"]; 
+var bunnyImages = ['../Word_Guess_Game/assets/images/american-fuzzy-lop.jpg', '../Word_Guess_Game/assets/images/dutch-rabbit.jpg', '../Word_Guess_Game/assets/images/english-lop.jpg', '../Word_Guess_Game/assets/images/flemish-giant.jpg', '../Word_Guess_Game/assets/images/french-lop-2.jpg','../Word_Guess_Game/assets/images/holland-lop-rabbit.jpg', '../Word_Guess_Game/assets/images/lionhead-rabbit.jpg', '../Word_Guess_Game/assets/images/mini-rex-rabbit-1.jpg', '../Word_Guess_Game/assets/images/netherland-dwarf-rabbit.jpg', '../Word_Guess_Game/assets/images/polish-rabbit.jpg'];
+var dashes = [];
+var bunnyAnswer = [];
+var userGuesses = [];
 ```
 -----
-To test if the user's guess was the correct answer, the website goes through multiple if/else if statements.
 
-The user's choice which is stored in the an answer array, is compared to each choice in each question's object.
-
-If the user's selection matches with the correct choice, it will display the right answer page, otherwise it will display the wrong answer page.
+After the computer randomly selects a bunny from the default list, it goes through a for loop depending on how long the word is and fills the dashes array with either a _ or a space.
 
 ```javascript
-if (test[questionCount].answer == test[questionCount].choices[0]) {
-    console.log("went through 0");
+//Computer displays the word in this format _ _ _ _ _ _ _
+for (var i = 0; i < bunnyTypes[randomWordAddress].length; i++) {
 
-    $("#answer0").on("click", rightAnswer);
-    $("#answer1").on("click", wrongAnswer);
-    $("#answer2").on("click", wrongAnswer);
-    $("#answer3").on("click", wrongAnswer);
+    //checks to see if the letter is a space or word        
+    if (bunnyTypes[randomWordAddress].charAt(i) == ' ') {
+        dashes[i] = " ";
+        // console.log(dashes[i]);
+    } else {
+        dashes[i] = "_";
+        // console.log(dashes[i]);
+    }
 
+    //Assigns the answer into an array
+    bunnyAnswer[i] = bunnyTypes[randomWordAddress].charAt(i);
+    console.log(bunnyAnswer[i] = bunnyTypes[randomWordAddress].charAt(i));
 
-} else if (test[questionCount].answer == test[questionCount].choices[1]){
-    console.log("went through 1");
+    //Displays the _'s on the html
+    letterDisplay.innerHTML += dashes[i] + "&nbsp;";
 
-    $("#answer0").on("click", wrongAnswer);
-    $("#answer1").on("click", rightAnswer);
-    $("#answer2").on("click", wrongAnswer);
-    $("#answer3").on("click", wrongAnswer);
+}
 ```
-----
-The user only has 10 seconds to answer each question. Everytime a question is displayed, the seconds variable is set to 10 and an interval is set in order to count down the number of seconds remaining.
-```javascript
-seconds = 10;
-timeDisplay.text("Time remaining left: " + seconds + " seconds");
-interval = setInterval(countDown, 1000) //remember to change this later!
-answerDisplay.text("");
-```
+
 MIT © [Dealan](https://ddiongzon001.github.io/)
